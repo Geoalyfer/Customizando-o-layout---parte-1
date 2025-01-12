@@ -1,0 +1,30 @@
+import streamlit as st
+import pandas as pd
+
+st.set_page_config(
+    page_title="Meu Sistema Streamlit",
+    page_icon="🙌",
+    layout = "wide"
+)
+
+lateral = st.sidebar
+data = lateral.date_input("Selecione a data")
+cidade = lateral.selectbox("Selecione a cidade",
+                           ["Belo Horizonte", "Rio de Janeiro"])
+
+
+@st.cache_data
+def carregar_dados():
+    dados = pd.read_csv("acidentes.csv")
+    return dados
+
+dados = carregar_dados()
+
+st.title("Dados")
+tabela = st.dataframe(dados)
+
+municipios = dados["municipio"].value_counts()
+st.bar_chart(municipios)
+
+st.subheader("Cidade")
+st.write(f"A cidade selecionada foi {cidade}")
